@@ -5,7 +5,7 @@ import os
 json_dirs = ['SenTube/automobiles_EN/', 'SenTube/tablets_EN/']
 count = 0
 comment_keyset = set()
-fwrite = open('list/all.video', 'w')
+fwrite = open('list/all', 'w')
 for json_dir in json_dirs:
     for json_file in os.listdir(json_dir):
         if '.json' not in json_file:
