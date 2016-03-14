@@ -9,10 +9,9 @@ import sys
 # Performs K-means clustering and save the model to a local file
 
 if __name__ == '__main__':
-    if len(sys.argv) != 8:
-        print "Usage: {0} event_name validation_part feat_dir feat_suffix feat_type feat_dim output_file".format(sys.argv[0])
-        print "event_name -- name of the event (P001, P002 or P003 in Homework 1)"
-        print "validation_part -- part index of the validation file"
+    if len(sys.argv) != 7:
+        print "Usage: {0} event_name feat_dir feat_suffix feat_type feat_dim output_file".format(sys.argv[0])
+        print "event_name -- name of the event"
         print "feat_dir -- dir of feature files"
         print "feat_suffix -- suffix of feature files, eg: spbof"
         print "feat_type -- type of feature files, dense|sparse"
@@ -21,40 +20,26 @@ if __name__ == '__main__':
         exit(1)
 
     event_name = sys.argv[1]
-    validation_part = sys.argv[2]
-    validation_file = "list/train_dev_part"+validation_part
-    feat_dir = sys.argv[3]
-    feat_suffix = sys.argv[4]
-    feat_type = sys.argv[5]
-    feat_dim = int(sys.argv[6])
-    output_file = sys.argv[7]
-    all_file = "list/train_dev"
+    feat_dir = sys.argv[2]
+    feat_suffix = sys.argv[3]
+    feat_type = sys.argv[4]
+    feat_dim = int(sys.argv[5])
+    output_file = sys.argv[6]
+    all_file = "list/train"
 
-    validation_video_ids = []
     # read in labels
-    if validation_part != "-1":
-        label_file = validation_file
-        fread_label = open(label_file, 'r')
-        for line in fread_label.readlines():
-            tokens = line.strip().split(' ')
-            video_id = tokens[0]
-            validation_video_ids.append(video_id)
-        fread_label.close()
-
     video_ids = []
     # read in labels
     labels = []
     label_file = all_file
     fread_label = open(label_file, 'r')
     for line in fread_label.readlines():
-        tokens = line.strip().split(' ')
+        tokens = line.strip().split('\t')
         video_id = tokens[0]
-        if video_id in validation_video_ids:
+        cat = tokens[1]
+        label = float(tokens[2])
+        if cat != event_name:
             continue
-        if tokens[1] != event_name:
-            label = -1
-        else:
-            label = 1
         video_ids.append(video_id)
         labels.append(label)
     fread_label.close()

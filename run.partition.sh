@@ -13,9 +13,9 @@ video_path=../video   # path to the directory containing all the videos. In this
 cluster_num=200        # the number of clusters in k-means. Note that 50 is by no means the optimal solution.
                       # You need to explore the best config by yourself.
 
-sort -R list/train_dev > list/train_dev_random
-sed -n 1,412p list/train_dev_random > list/train_dev_part0
-sed -n 413,824p list/train_dev_random > list/train_dev_part1
-sed -n 825,1236p list/train_dev_random > list/train_dev_part2
+sort -R list/all > list/all_random
+sed -n 1,89p list/all_random > list/train
+sed -n 90,178p list/all_random > list/test
+rm list/all_random
 # Great! We are done!
 echo "SUCCESSFUL COMPLETION"
