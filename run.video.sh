@@ -9,7 +9,7 @@ export PATH=$opensmile_path:$speech_tools_path:$ffmpeg_path:$PATH
 export LD_LIBRARY_PATH=$ffmpeg_path/libs:$opensmile_path/lib:$LD_LIBRARY_PATH
 
 # Two additional variables
-video_path=../video   # path to the directory containing all the videos. In this example setup, we are linking all the videos to "../video"
+video_path=../youtube/mp4   # path to the directory containing all the videos. In this example setup, we are linking all the videos to "../video"
 cluster_num=200        # the number of clusters in k-means. Note that 50 is by no means the optimal solution.
                       # You need to explore the best config by yourself.
 mkdir -p frame video
@@ -23,9 +23,10 @@ mkdir -p frame video
 #    image set of a video in step 1. 
 # 3. ExtractSIFT: You may use the provided OpenCV to extract the SIFT features from the selected
 #    keyframes. There are many examples available online such as 1 and 2.
-cat list/train_dev | awk '{print $1}' > list/train_dev.video
-cat list/train_dev.video list/test.video > list/all.video
 for line in $(cat "list/all.video"); do
+    if [ ! -f $video_path/${line}.mp4 ]; then
+        continue
+    fi
     ffmpeg -y -ss 0 -i $video_path/${line}.mp4 -strict experimental -t 30 -r 15 -vf scale=160x120,setdar=dar=4/3 video/${line}.mp4
     mkdir -p frame/${line}
     ffmpeg -y -i video/${line}.mp4 -vsync 2 -vf select='eq(pict_type\,I)' -f image2 frame/${line}/%d.jpeg
