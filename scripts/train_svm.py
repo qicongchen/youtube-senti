@@ -38,6 +38,10 @@ if __name__ == '__main__':
         video_id = tokens[0]
         cat = tokens[1]
         label = float(tokens[2])
+        if label >= 0.5:
+            label = 1
+        else:
+            label = 0
         if cat != event_name:
             continue
         video_ids.append(video_id)

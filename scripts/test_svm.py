@@ -37,7 +37,7 @@ if __name__ == '__main__':
     fread_label = open(label_file, 'r')
     fwrite = open("list/"+event_name+"_test_label", "w")
     for line in fread_label.readlines():
-        tokens = line.strip().split(' ')
+        tokens = line.strip().split('\t')
         video_id = tokens[0]
         cat = tokens[1]
         label = float(tokens[2])
