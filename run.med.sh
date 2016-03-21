@@ -31,3 +31,35 @@ for event in Autos Tech; do
   # compute the average precision by calling the mAP package
   ap list/${event}_test_label cnn_pred/${event}_pred
 done
+
+echo "#####################################"
+echo "#       MED with MFCC Features      #"
+echo "#####################################"
+mkdir -p mfcc_pred
+# iterate over the events
+feat_dim_mfcc=200
+for event in Autos Tech; do
+  echo "=========  Event $event========="
+  # now train a svm model
+  python scripts/train_svm.py $event "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/svm.$event.model || exit 1;
+  # apply the svm model to the training videos;
+  # output the score of each training video to a file ${event}_pred 
+  python scripts/test_svm.py $event mfcc_pred/svm.$event.model "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/${event}_pred || exit 1;
+  # compute the average precision by calling the mAP package
+  ap list/${event}_test_label mfcc_pred/${event}_pred
+done
+
+echo "#####################################"
+echo "#       MED with fusion Features      #"
+echo "#####################################"
+mkdir -p fusion_pred
+# iterate over the events
+for event in Autos Tech; do
+  echo "=========  Event $event ========="
+  # apply the late fusion;
+  # output the score of each validation video to a file ${event}_pred 
+  python scripts/late_fusion.py $event fusion_pred/${event}_pred || exit 1;
+  # compute the average precision by calling the mAP package
+  ap list/${event}_test_label fusion_pred/${event}_pred
+done
+
