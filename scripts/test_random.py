@@ -1,6 +1,6 @@
 #!/bin/python
 import sys
-import random
+import numpy
 
 # Apply the SVM model to the testing videos; Output the score for each video
 
@@ -28,7 +28,8 @@ if __name__ == '__main__':
     fread_label.close()
 
     # read in features
-    scores = numpy.random.shuffle(range(len(video_ids)))
+    scores = range(len(video_ids))
+    numpy.random.shuffle(scores)
 
     # dump result
     fwrite = open(output_file, 'w')

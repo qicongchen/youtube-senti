@@ -69,6 +69,7 @@ if __name__ == '__main__':
         features.append(feature)
 
     # test svm
+    features = numpy.array(features)
     scores = [sample for sample in svm.predict(features)]
     # dump result
     fwrite = open(output_file, 'w')
