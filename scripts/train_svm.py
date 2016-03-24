@@ -65,6 +65,8 @@ if __name__ == '__main__':
         features.append(feature)
 
     # train svm
+    features = numpy.array(features)
+    labels = numpy.array(labels)
     clf = RankSVM().fit(features, labels)
     # Dump model
     with open(output_file, 'wb') as f:
