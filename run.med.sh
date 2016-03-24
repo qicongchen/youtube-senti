@@ -24,7 +24,7 @@ for event in Autos Tech; do
   echo "=========  Event $event========="
   python scripts/test_random.py $event random_pred/${event}_pred || exit 1;
   # compute the average precision by calling the mAP package
-  ap list/${event}_test_label random_pred/${event}_pred
+  #ap list/${event}_test_label random_pred/${event}_pred
 done
 
 echo "#####################################"
@@ -41,7 +41,7 @@ for event in Autos Tech; do
   # output the score of each training video to a file ${event}_pred 
   python scripts/test_svm.py $event cnn_pred/svm.$event.model "cnn/" "feat" "dense" $feat_dim_cnn cnn_pred/${event}_pred || exit 1;
   # compute the average precision by calling the mAP package
-  ap list/${event}_test_label cnn_pred/${event}_pred
+  #ap list/${event}_test_label cnn_pred/${event}_pred
 done
 
 echo "#####################################"
@@ -58,7 +58,7 @@ for event in Autos Tech; do
   # output the score of each training video to a file ${event}_pred 
   python scripts/test_svm.py $event mfcc_pred/svm.$event.model "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/${event}_pred || exit 1;
   # compute the average precision by calling the mAP package
-  ap list/${event}_test_label mfcc_pred/${event}_pred
+  #ap list/${event}_test_label mfcc_pred/${event}_pred
 done
 
 echo "#####################################"
@@ -72,6 +72,6 @@ for event in Autos Tech; do
   # output the score of each validation video to a file ${event}_pred 
   python scripts/late_fusion.py $event fusion_pred/${event}_pred || exit 1;
   # compute the average precision by calling the mAP package
-  ap list/${event}_test_label fusion_pred/${event}_pred
+  #ap list/${event}_test_label fusion_pred/${event}_pred
 done
 

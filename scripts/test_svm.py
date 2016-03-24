@@ -2,7 +2,7 @@
 
 import numpy
 import os
-from sklearn.svm.classes import SVC
+from sklearn.svm.classes import SVR
 import cPickle
 import sys
 
@@ -41,14 +41,10 @@ if __name__ == '__main__':
         video_id = tokens[0]
         cat = tokens[1]
         label = float(tokens[2])
-        if label >= 0.5:
-            label = 1
-        else:
-            label = 0
         if cat != event_name:
             continue
         video_ids.append(video_id)
-        fwrite.write("%d\n" % label)
+        fwrite.write("%g\n" % label)
     fwrite.close()
     fread_label.close()
 
@@ -75,7 +71,7 @@ if __name__ == '__main__':
         features.append(feature)
 
     # test svm
-    scores = [sample[1] for sample in svm.predict_log_proba(features)]
+    scores = [sample for sample in svm.predict(features)]
     # dump result
     fwrite = open(output_file, 'w')
     for score in scores:
