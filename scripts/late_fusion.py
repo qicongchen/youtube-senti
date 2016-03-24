@@ -5,7 +5,7 @@ import sys
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print "Usage: {0} event_name output_file".format(sys.argv[0])
         print "event_name -- name of the event (P001, P002 or P003 in Homework 1)"
         print "output_file -- path to save the prediction score"
