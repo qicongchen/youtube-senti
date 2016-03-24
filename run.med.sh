@@ -22,9 +22,9 @@ mkdir -p random_pred
 # iterate over the events
 for event in Autos Tech; do
   echo "=========  Event $event========="
-  python scripts/test_random.py $event random_pred/${event}_pred || exit 1;
+  python scripts/test_random.py $event random_pred/${event}_indexes || exit 1;
   # compute the average precision by calling the mAP package
-  python scripts/eval.py list/${event}_test_label random_pred/${event}_pred
+  python scripts/eval.py list/${event}_test_label random_pred/${event}_indexes
 done
 
 echo "#####################################"
@@ -39,9 +39,9 @@ for event in Autos Tech; do
   python scripts/train_svm.py $event "cnn/" "feat" "dense" $feat_dim_cnn cnn_pred/svm.$event.model || exit 1;
   # apply the svm model to the training videos;
   # output the score of each training video to a file ${event}_pred 
-  python scripts/test_svm.py $event cnn_pred/svm.$event.model "cnn/" "feat" "dense" $feat_dim_cnn cnn_pred/${event}_pred || exit 1;
+  python scripts/test_svm.py $event cnn_pred/svm.$event.model "cnn/" "feat" "dense" $feat_dim_cnn cnn_pred/${event}_pred cnn_pred/${event}_indexes || exit 1;
   # compute the average precision by calling the mAP package
-  python scripts/eval.py list/${event}_test_label cnn_pred/${event}_pred
+  python scripts/eval.py list/${event}_test_label cnn_pred/${event}_indexes
 done
 
 echo "#####################################"
@@ -56,9 +56,9 @@ for event in Autos Tech; do
   python scripts/train_svm.py $event "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/svm.$event.model || exit 1;
   # apply the svm model to the training videos;
   # output the score of each training video to a file ${event}_pred 
-  python scripts/test_svm.py $event mfcc_pred/svm.$event.model "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/${event}_pred || exit 1;
+  python scripts/test_svm.py $event mfcc_pred/svm.$event.model "kmeans/" "feat" "dense" $feat_dim_mfcc mfcc_pred/${event}_pred mfcc_pred/${event}_indexes || exit 1;
   # compute the average precision by calling the mAP package
-  python scripts/eval.py list/${event}_test_label mfcc_pred/${event}_pred
+  python scripts/eval.py list/${event}_test_label mfcc_pred/${event}_indexes
 done
 
 echo "#####################################"
@@ -70,8 +70,8 @@ for event in Autos Tech; do
   echo "=========  Event $event ========="
   # apply the late fusion;
   # output the score of each validation video to a file ${event}_pred 
-  python scripts/late_fusion.py $event fusion_pred/${event}_pred || exit 1;
+  python scripts/late_fusion.py $event fusion_pred/${event}_pred fusion_pred/${event}_indexes || exit 1;
   # compute the average precision by calling the mAP package
-  python scripts/eval.py list/${event}_test_label fusion_pred/${event}_pred
+  python scripts/eval.py list/${event}_test_label fusion_pred/${event}_indexes
 done
 

@@ -115,6 +115,8 @@ class RankSVM(svm.LinearSVC):
             the rows in X.
         """
         if hasattr(self, 'coef_'):
-            return np.argsort(np.dot(X, self.coef_.ravel()))[::-1]
+            scores = np.dot(X, self.coef_.ravel())
+            indexes = np.argsort(scores)[::-1]
+            return scores, indexes
         else:
             raise ValueError("Must call fit() prior to predict()")
