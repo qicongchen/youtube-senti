@@ -28,10 +28,7 @@ if __name__ == '__main__':
     fread_label.close()
 
     # read in features
-    scores = []
-    for video_id in video_ids:
-        score = random.uniform(-1, 1)
-        scores.append(score)
+    scores = numpy.random.shuffle(range(len(video_ids)))
 
     # dump result
     fwrite = open(output_file, 'w')
