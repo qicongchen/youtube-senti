@@ -16,6 +16,18 @@ export PATH=$opensmile_path:$speech_tools_path:$ffmpeg_path:$map_path:$PATH
 export LD_LIBRARY_PATH=$ffmpeg_path/libs:$opensmile_path/lib:$LD_LIBRARY_PATH
 
 echo "#####################################"
+echo "#       MED with Random      #"
+echo "#####################################"
+mkdir -p random_pred
+# iterate over the events
+for event in Autos Tech; do
+  echo "=========  Event $event========="
+  python scripts/test_random.py $event random_pred/${event}_pred || exit 1;
+  # compute the average precision by calling the mAP package
+  ap list/${event}_test_label random_pred/${event}_pred
+done
+
+echo "#####################################"
 echo "#       MED with CNN Features      #"
 echo "#####################################"
 mkdir -p cnn_pred
