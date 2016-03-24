@@ -2,11 +2,9 @@
 
 import numpy
 import os
-from sklearn.svm.classes import SVR
 import cPickle
 import sys
-
-# Performs K-means clustering and save the model to a local file
+from ranking import RankSVM
 
 if __name__ == '__main__':
     if len(sys.argv) != 7:
@@ -67,8 +65,7 @@ if __name__ == '__main__':
         features.append(feature)
 
     # train svm
-    clf = SVR()
-    clf.fit(features, labels)
+    clf = RankSVM.fit(features, labels)
     # Dump model
     with open(output_file, 'wb') as f:
         cPickle.dump(clf, f)

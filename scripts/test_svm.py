@@ -2,11 +2,9 @@
 
 import numpy
 import os
-from sklearn.svm.classes import SVR
 import cPickle
 import sys
-
-# Apply the SVM model to the testing videos; Output the score for each video
+from ranking import RankSVM
 
 if __name__ == '__main__':
     if len(sys.argv) != 8:
