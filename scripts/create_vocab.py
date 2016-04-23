@@ -21,7 +21,7 @@ if __name__ == '__main__':
         if os.path.exists(asr_path) is False:
             continue
         fread_asr = open(asr_path, "r")
-        for line_asr in fread_asr.readlines():
+        for line_asr in fread_asr:
             tokens = line_asr.strip().split(' ')
             word = tokens[4]
             if word not in word_count:

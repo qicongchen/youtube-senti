@@ -19,12 +19,13 @@ if __name__ == '__main__':
             tokens = line.strip().split()
             word = tokens[0]
             vector = np.array([float(token) for token in tokens[1:]])
+            word2vec[word] = vector
 
     vectors = {}
     with open(file_list, "r") as fread:
         for line in fread:
             video_id = line.replace('\n', '')
-            asr_path = "asr/" + video_id + ".ctm"
+            asr_path = "asr/ctm/" + video_id + ".ctm"
             if os.path.exists(asr_path) is False:
                 continue
             vector = np.array([0]*300)
@@ -32,6 +33,8 @@ if __name__ == '__main__':
                 for line_asr in fread_asr.readlines():
                     tokens = line_asr.strip().split(' ')
                     word = tokens[4]
+                    if word not in word2vec:
+                        continue
                     vector = vector + word2vec[word]
             vector = vector/np.linalg.norm(vector)
             vectors[video_id] = vector
