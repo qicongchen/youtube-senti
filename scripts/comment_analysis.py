@@ -41,7 +41,7 @@ def tokenize(text):
 
 
 def stem(word):
-    word = word.lower()  
+    word = word.lower()
     word = STEMMER.stem(word)
     return word, word in STOPWORDS
 
@@ -57,7 +57,7 @@ def read_word2vec(glove_file):
     return word2vec
 
 
-def get_features(video_ids, word2vec):
+def get_features(word2vec):
     vectors = {}
     json_dirs = ['SenTube/automobiles_EN/', 'SenTube/tablets_EN/']
     for json_dir in json_dirs:
@@ -67,9 +67,7 @@ def get_features(video_ids, word2vec):
             with open("{0}{1}".format(json_dir, json_file)) as fread:
                 data = json.load(fread)
             video_id = data['video_id']
-            if video_id not in video_ids:
-                continue
-            vector = np.array([0]*300)
+            vector = np.array([0] * 300)
             for comment in data['comments']:
                 text = comment["text"]
                 words = tokenize(text)
@@ -79,11 +77,8 @@ def get_features(video_ids, word2vec):
                     vector = vector + word2vec[word]
             norm = np.linalg.norm(vector)
             if norm > 0:
-                vector = vector/norm
+                vector = vector / norm
             vectors[video_id] = vector
-    with open(vocab_file, 'w') as f:
-        for word, count in word_count.items():
-            f.write("%d\n" % word)
     return vectors
 
 
@@ -127,6 +122,6 @@ if __name__ == '__main__':
     if len(sys.argv) != 1:
         print "Usage: command {0}".format(sys.argv[0])
         exit(1)
-    
+
     create_vocab(VOCAB_FILE)
     create_glove(VOCAB_FILE, GLOVE_FILE, PRUNED_GLOVE_FILE)
