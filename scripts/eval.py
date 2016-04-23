@@ -32,7 +32,7 @@ if __name__ == '__main__':
         score = labels[index]
         scores.append(score)
 
-    ndcg = ndcg_at_k(scores, len(scores))
+    ndcg = ndcg_at_k(scores, 5)
     print 'ndcg: %.3f\n' % ndcg
 
 

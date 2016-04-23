@@ -2,6 +2,12 @@
 import json
 import os
 import sys
+import nltk
+from nltk.stem.porter import PorterStemmer
+from nltk.corpus import stopwords
+
+STEMMER = PorterStemmer()
+STOPWORDS = stopwords.words('english')
 
 
 def get_videos(phase, target_cat):
@@ -17,6 +23,24 @@ def get_videos(phase, target_cat):
     return video_ids
 
 
+def tokenize(text):
+    words = []
+
+    text = text.lower()
+    tokens = nltk.word_tokenize(text)
+    for token in tokens:    
+        token = STEMMER.stem(token)
+        if token in STOPWORDS:
+            continue
+        words.append(token)
+
+
+def stem(word):
+    word = word.lower()  
+    word = STEMMER.stem(word)
+    return word, word in STOPWORDS
+
+
 def create_vocab(vocab_file):
     word_count = {}
     json_dirs = ['SenTube/automobiles_EN/', 'SenTube/tablets_EN/']
@@ -28,7 +52,7 @@ def create_vocab(vocab_file):
                 data = json.load(fread)
             for comment in data['comments']:
                 text = comment["text"]
-                words = text.split()
+                words = tokenize(text)
                 for word in words:
                     if word not in word_count:
                         word_count[word] = 0
