@@ -13,7 +13,7 @@ if __name__ == '__main__':
         exit(1)
 
     label_file = sys.argv[1]
-    rank_file = sys.argv[2]
+    index_file = sys.argv[2]
 
     labels = []
     fread_label = open(label_file, 'r')
@@ -35,6 +35,6 @@ if __name__ == '__main__':
         scores.append(score)
 
     ndcg = ndcg_at_k(scores, len(scores))
-    print 'ndcg: %.33f\n' % ndcg
+    print 'ndcg: %.3f\n' % ndcg
 
 
