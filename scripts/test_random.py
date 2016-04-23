@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     video_ids = []
     # read in labels
-    label_file = "list/test"
+    label_file = "list/pruned_test"
     fread_label = open(label_file, 'r')
     for line in fread_label.readlines():
         tokens = line.strip().split('\t')
