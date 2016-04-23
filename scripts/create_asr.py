@@ -2,6 +2,7 @@
 import numpy as np
 import os
 import sys
+from comment_analysis import stem
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -31,7 +32,7 @@ if __name__ == '__main__':
             with open(asr_path, "r") as fread_asr:
                 for line_asr in fread_asr.readlines():
                     tokens = line_asr.strip().split(' ')
-                    word = tokens[4]
+                    word = stem(tokens[4])
                     vector = vector + word2vec[word]
             vector = vector/np.linalg.norm(vector)
             vectors[video_id] = vector
