@@ -28,4 +28,4 @@ if __name__ == '__main__':
     scores = scores/len(pred_files)
     indexes = numpy.argsort(scores)[::-1]
     numpy.savetxt(output_file, scores)
-    numpy.savetxt(index_file, indexes)
+    numpy.savetxt(index_file, indexes, fmt='%d')
