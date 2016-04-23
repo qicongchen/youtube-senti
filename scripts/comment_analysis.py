@@ -37,6 +37,7 @@ def tokenize(text):
         #  if token in STOPWORDS:
         #      continue
         words.append(token)
+    return words
 
 
 def stem(word):
@@ -104,7 +105,7 @@ def create_vocab(vocab_file):
                     word_count[word] += 1
     with open(vocab_file, 'w') as f:
         for word, count in word_count.items():
-            f.write("%d\n" % word)
+            f.write("%s\n" % word.encode('UTF-8'))
 
 
 def create_glove(vocab_file, glove_file, pruned_glove_file):

@@ -23,7 +23,7 @@ if __name__ == '__main__':
     feat_type = sys.argv[4]
     feat_dim = int(sys.argv[5])
     output_file = sys.argv[6]
-    all_file = "list/train"
+    all_file = "list/pruned_train"
 
     # read in labels
     video_ids = []
@@ -47,21 +47,20 @@ if __name__ == '__main__':
     for video_id in video_ids:
         feat_path = feat_dir + video_id + "." + feat_suffix
         feature = [0]*feat_dim
-        if os.path.exists(feat_path) is True:
-            if feat_type == 'dense':
-                feature = numpy.genfromtxt(feat_path, delimiter=';')
-            else:
-                line = numpy.genfromtxt(feat_path, delimiter=' ', dtype=str)
-                if len(line.shape) == 0:
-                    line = numpy.array([line])
-                for item in line:
-                    if len(item) == 0:
-                        continue
-                    tokens = item.split(':')
-                    key = int(tokens[0])-1
-                    value = float(tokens[1])
-                    if key < feat_dim:
-                        feature[key] = value
+        if feat_type == 'dense':
+            feature = numpy.genfromtxt(feat_path, delimiter=';')
+        else:
+            line = numpy.genfromtxt(feat_path, delimiter=' ', dtype=str)
+            if len(line.shape) == 0:
+                line = numpy.array([line])
+            for item in line:
+                if len(item) == 0:
+                    continue                 
+                tokens = item.split(':')
+                key = int(tokens[0])-1
+                value = float(tokens[1])
+                if key < feat_dim:
+                    feature[key] = value
         features.append(feature)
 
     # train svm
