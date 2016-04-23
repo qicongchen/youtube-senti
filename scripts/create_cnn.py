@@ -60,7 +60,7 @@ if __name__ == '__main__':
         if s > 0:
             vector = vector/s
         line = ';'.join([str(v) for v in vector])
-        feat_path = "cnn/"+video_id+".feat"
+        feat_path = "cnn_feat/"+video_id+".feat"
         fwrite = open(feat_path, "w")
         fwrite.write(line + '\n')
         fwrite.close()
