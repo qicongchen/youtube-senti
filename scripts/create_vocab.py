@@ -24,7 +24,8 @@ if __name__ == '__main__':
         fread_asr = open(asr_path, "r")
         for line_asr in fread_asr:
             tokens = line_asr.strip().split(' ')
-            word, is_stop = stem(tokens[4])
+            # word, is_stop = stem(tokens[4])
+            word = tokens[4]
             if word not in word_count:
                 word_count[word] = 0
             word_count[word] += 1

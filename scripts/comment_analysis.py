@@ -29,10 +29,11 @@ def tokenize(text):
     text = text.lower()
     tokens = nltk.word_tokenize(text)
     for token in tokens:    
-        token = STEMMER.stem(token)
-        if token in STOPWORDS:
-            continue
+        #  token = STEMMER.stem(token)
+        #  if token in STOPWORDS:
+        #      continue
         words.append(token)
+    return words
 
 
 def stem(word):

@@ -33,11 +33,14 @@ if __name__ == '__main__':
             with open(asr_path, "r") as fread_asr:
                 for line_asr in fread_asr.readlines():
                     tokens = line_asr.strip().split(' ')
-                    word = stem(tokens[4])
+                    #  word = stem(tokens[4])
+                    word = tokens[4]
                     if word not in word2vec:
                         continue
                     vector = vector + word2vec[word]
-            vector = vector/np.linalg.norm(vector)
+            norm = np.linalg.norm(vector)
+            if norm > 0:
+                vector = vector/np.linalg.norm(vector)
             vectors[video_id] = vector
 
     for video_id, vector in vectors.items():
