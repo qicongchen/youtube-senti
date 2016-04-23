@@ -2,12 +2,16 @@
 import json
 import os
 import sys
+import numpy as np
 import nltk
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 
 STEMMER = PorterStemmer()
 STOPWORDS = stopwords.words('english')
+VOCAB_FILE = 'comment/vocab'
+GLOVE_FILE = 'asr/glove/glove.6B.300d.txt'
+PRUNED_GLOVE_FILE = 'comment/glove.pruned.300d.txt'
 
 
 def get_videos(phase, target_cat):
@@ -29,9 +33,9 @@ def tokenize(text):
     text = text.lower()
     tokens = nltk.word_tokenize(text)
     for token in tokens:    
-        token = STEMMER.stem(token)
-        if token in STOPWORDS:
-            continue
+        #  token = STEMMER.stem(token)
+        #  if token in STOPWORDS:
+        #      continue
         words.append(token)
 
 
@@ -39,6 +43,47 @@ def stem(word):
     word = word.lower()  
     word = STEMMER.stem(word)
     return word, word in STOPWORDS
+
+
+def read_word2vec(glove_file):
+    word2vec = {}
+    with open(glove_file, 'r') as f:
+        for line in f:
+            tokens = line.strip().split()
+            word = tokens[0]
+            vector = np.array(float(token) for token in tokens[1:])
+            word2vec[word] = vector
+    return word2vec
+
+
+def get_features(video_ids, word2vec):
+    vectors = {}
+    json_dirs = ['SenTube/automobiles_EN/', 'SenTube/tablets_EN/']
+    for json_dir in json_dirs:
+        for json_file in os.listdir(json_dir):
+            if '.json' not in json_file:
+                continue
+            with open("{0}{1}".format(json_dir, json_file)) as fread:
+                data = json.load(fread)
+            video_id = data['video_id']
+            if video_id not in video_ids:
+                continue
+            vector = np.array([0]*300)
+            for comment in data['comments']:
+                text = comment["text"]
+                words = tokenize(text)
+                for word in words:
+                    if word not in word2vec:
+                        continue
+                    vector = vector + word2vec[word]
+            norm = np.linalg.norm(vector)
+            if norm > 0:
+                vector = vector/norm
+            vectors[video_id] = vector
+    with open(vocab_file, 'w') as f:
+        for word, count in word_count.items():
+            f.write("%d\n" % word)
+    return vectors
 
 
 def create_vocab(vocab_file):
@@ -78,15 +123,9 @@ def create_glove(vocab_file, glove_file, pruned_glove_file):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print "Usage: {0} vocab_file, glove_file, pruned_glove_file".format(sys.argv[0])
-        print "vocab_file -- path to the vocabulary file"
-        print "glove_file -- path to the Stanford glove word2vec file"
-        print "pruned_glove_file -- path to the pruned Stanford glove word2vec file"
+    if len(sys.argv) != 1:
+        print "Usage: command {0}".format(sys.argv[0])
         exit(1)
-
-    vocab_file = sys.argv[1]
-    glove_file = sys.argv[2]
-    pruned_glove_file = sys.argv[3]
-    create_vocab(vocab_file)
-    create_glove(vocab_file, glove_file, pruned_glove_file)
+    
+    create_vocab(VOCAB_FILE)
+    create_glove(VOCAB_FILE, GLOVE_FILE, PRUNED_GLOVE_FILE)
