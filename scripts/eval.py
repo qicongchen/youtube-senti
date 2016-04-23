@@ -1,7 +1,5 @@
 #!/bin/python 
 
-import numpy
-import os
 import sys
 from rank_metrics import *
 

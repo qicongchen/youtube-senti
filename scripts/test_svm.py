@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     video_ids = []
     # read in labels
-    label_file = "list/test"
+    label_file = "list/pruned_test"
     fread_label = open(label_file, 'r')
     fwrite = open("list/"+event_name+"_test_label", "w")
     for line in fread_label.readlines():
@@ -51,23 +51,22 @@ if __name__ == '__main__':
     # read in features
     features = []
     for video_id in video_ids:
-        feat_path = feat_dir + video_id + "." + feat_suffix
+        feat_path = "{0}{1}.{2}".format(feat_dir, video_id, feat_suffix)
         feature = [0]*feat_dim
-        if os.path.exists(feat_path) is True:
-            if feat_type == 'dense':
-                feature = numpy.genfromtxt(feat_path, delimiter=';')
-            else:
-                line = numpy.genfromtxt(feat_path, delimiter=' ', dtype=str)
-                if len(line.shape) == 0:
-                    line = numpy.array([line])
-                for item in line:
-                    if len(item) == 0:
-                        continue
-                    tokens = item.split(':')
-                    key = int(tokens[0])-1
-                    value = float(tokens[1])
-                    if key < feat_dim:
-                        feature[key] = value
+        if feat_type == 'dense':
+            feature = numpy.genfromtxt(feat_path, delimiter=';')
+        else:
+            line = numpy.genfromtxt(feat_path, delimiter=' ', dtype=str)
+            if len(line.shape) == 0:
+                line = numpy.array([line])
+            for item in line:
+                if len(item) == 0:
+                    continue
+                tokens = item.split(':')
+                key = int(tokens[0])-1
+                value = float(tokens[1])
+                if key < feat_dim:
+                    feature[key] = value
         features.append(feature)
 
     # test svm
