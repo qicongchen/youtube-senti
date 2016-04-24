@@ -79,6 +79,23 @@ for event in Autos Tech; do
 done
 
 echo "#####################################"
+echo "#       MED with Comment Features      #"
+echo "#####################################"
+mkdir -p comment_pred
+# iterate over the events
+feat_dim_comment=300
+for event in Autos Tech; do
+  echo "=========  Event $event========="
+  # now train a svm model
+  python scripts/train_svm.py $event "comment_feat/" "feat" "dense" $feat_dim_comment comment_pred/svm.$event.model || exit 1;
+  # apply the svm model to the training videos;
+  # output the score of each training video to a file ${event}_pred 
+  python scripts/test_svm.py $event comment_pred/svm.$event.model "comment_feat/" "feat" "dense" $feat_dim_comment comment_pred/${event}_pred comment_pred/${event}_indexes || exit 1;
+  # compute the average precision by calling the mAP package
+  python scripts/eval.py list/${event}_test_label comment_pred/${event}_indexes
+done
+
+echo "#####################################"
 echo "#       MED with fusion Features      #"
 echo "#####################################"
 mkdir -p fusion_pred
