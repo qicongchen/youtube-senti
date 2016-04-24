@@ -52,7 +52,7 @@ def read_word2vec(glove_file):
         for line in f:
             tokens = line.strip().split()
             word = tokens[0]
-            vector = np.array(float(token) for token in tokens[1:])
+            vector = np.array([float(token) for token in tokens[1:]])
             word2vec[word] = vector
     return word2vec
 
